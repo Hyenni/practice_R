@@ -336,6 +336,167 @@ all.equal(members,group)</code></pre>
 <pre><code>## [1] TRUE</code></pre>
 </div>
 </div>
+<div id="function" class="section level2">
+<h2>6. Function</h2>
+<p>One of the great strengths of R is the user’s ability to add functions. The structure of a function is given below.</p>
+<p>myfunction &lt;- function(arg1, arg2, …){</p>
+<p>statements</p>
+<p>return(object)</p>
+<p>}</p>
+<div id="including-code-5" class="section level3">
+<h3>[Including Code]</h3>
+<pre class="r"><code>myfunc = function(a,b) {return(a+b)}
+myfunc(1,2)</code></pre>
+<pre><code>## [1] 3</code></pre>
+<pre class="r"><code>myfunc = function(a,b,c=100) {return(a+b+c)}
+myfunc(1,2)</code></pre>
+<pre><code>## [1] 103</code></pre>
+<pre class="r"><code>myfunc(1,2,1000)</code></pre>
+<pre><code>## [1] 1003</code></pre>
+<pre class="r"><code>myfunc = function(a) {if(a==1) TRUE else FALSE}
+myfunc</code></pre>
+<pre><code>## function(a) {if(a==1) TRUE else FALSE}</code></pre>
+<pre class="r"><code>myfunc(1)</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<pre class="r"><code>myfunc(2)</code></pre>
+<pre><code>## [1] FALSE</code></pre>
+<pre class="r"><code>b = c(1:5)
+b</code></pre>
+<pre><code>## [1] 1 2 3 4 5</code></pre>
+<pre class="r"><code>for(i in b) {print(myfunc(i))}</code></pre>
+<pre><code>## [1] TRUE
+## [1] FALSE
+## [1] FALSE
+## [1] FALSE
+## [1] FALSE</code></pre>
+</div>
+</div>
+<div id="save" class="section level2">
+<h2>7. Save</h2>
+<p>save: writes an external representation of R objects to the specified file.</p>
+<div id="save.imagefile.rdata-save.image----" class="section level5">
+<h5>1.) save.image(file=‘.Rdata’), save.image() ==&gt; 작업한 것 모두 저장</h5>
+</div>
+<div id="savefile.rdata-----" class="section level5">
+<h5>2.) save(변수명,file=‘변수명.Rdata’) ==&gt; 특정 변수 저장 (재사용 가능)</h5>
+</div>
+<div id="including-code-6" class="section level3">
+<h3>[Including Code]</h3>
+<pre class="r"><code>a = c(1:100)
+a</code></pre>
+<pre><code>##   [1]   1   2   3   4   5   6   7   8   9  10  11  12  13  14  15  16  17
+##  [18]  18  19  20  21  22  23  24  25  26  27  28  29  30  31  32  33  34
+##  [35]  35  36  37  38  39  40  41  42  43  44  45  46  47  48  49  50  51
+##  [52]  52  53  54  55  56  57  58  59  60  61  62  63  64  65  66  67  68
+##  [69]  69  70  71  72  73  74  75  76  77  78  79  80  81  82  83  84  85
+##  [86]  86  87  88  89  90  91  92  93  94  95  96  97  98  99 100</code></pre>
+<pre class="r"><code>save(a,file='a_save.RData')
+
+remove(a)
+
+#&gt;a
+#Error: object 'a' not found 
+
+load(file='a_save.RData')
+a</code></pre>
+<pre><code>##   [1]   1   2   3   4   5   6   7   8   9  10  11  12  13  14  15  16  17
+##  [18]  18  19  20  21  22  23  24  25  26  27  28  29  30  31  32  33  34
+##  [35]  35  36  37  38  39  40  41  42  43  44  45  46  47  48  49  50  51
+##  [52]  52  53  54  55  56  57  58  59  60  61  62  63  64  65  66  67  68
+##  [69]  69  70  71  72  73  74  75  76  77  78  79  80  81  82  83  84  85
+##  [86]  86  87  88  89  90  91  92  93  94  95  96  97  98  99 100</code></pre>
+</div>
+</div>
+<div id="apply" class="section level2">
+<h2>8. Apply</h2>
+<p>returns a vector or array or list of values obtained by applying a function to margins of an array or matrix.</p>
+<p>lapply returns a list of the same length as X, each element of which is the result of applying FUN to the corresponding element of X.</p>
+<p>apply(X, MARGIN, FUN, …)</p>
+<p>MARGIN: 1-&gt; Row way, 2-&gt; Column way</p>
+<div id="including-code-7" class="section level3">
+<h3>[Including Code]</h3>
+<pre class="r"><code>x = cbind(x1 = 3,x2 = c(4:1,2:5))
+dimnames(x)[[1]] &lt;- letters[1:8]
+x</code></pre>
+<pre><code>##   x1 x2
+## a  3  4
+## b  3  3
+## c  3  2
+## d  3  1
+## e  3  2
+## f  3  3
+## g  3  4
+## h  3  5</code></pre>
+<pre class="r"><code>apply(x,1,mean,trim=.2)</code></pre>
+<pre><code>##   a   b   c   d   e   f   g   h 
+## 3.5 3.0 2.5 2.0 2.5 3.0 3.5 4.0</code></pre>
+<pre class="r"><code>apply(x,2,mean,trim=.2)</code></pre>
+<pre><code>## x1 x2 
+##  3  3</code></pre>
+<pre class="r"><code>lapply(c(1:3),function(x) {x+100})</code></pre>
+<pre><code>## [[1]]
+## [1] 101
+## 
+## [[2]]
+## [1] 102
+## 
+## [[3]]
+## [1] 103</code></pre>
+<pre class="r"><code>y = cbind(x1 = 3,x2 = c(4:1,2:5))
+y</code></pre>
+<pre><code>##      x1 x2
+## [1,]  3  4
+## [2,]  3  3
+## [3,]  3  2
+## [4,]  3  1
+## [5,]  3  2
+## [6,]  3  3
+## [7,]  3  4
+## [8,]  3  5</code></pre>
+<pre class="r"><code>dimnames(y)[[1]] &lt;- letters[1:8]
+y</code></pre>
+<pre><code>##   x1 x2
+## a  3  4
+## b  3  3
+## c  3  2
+## d  3  1
+## e  3  2
+## f  3  3
+## g  3  4
+## h  3  5</code></pre>
+<pre class="r"><code>dimnames(y)[[2]] &lt;- letters[9:10]
+y</code></pre>
+<pre><code>##   i j
+## a 3 4
+## b 3 3
+## c 3 2
+## d 3 1
+## e 3 2
+## f 3 3
+## g 3 4
+## h 3 5</code></pre>
+<pre class="r"><code>z = c(x1 = 3, x2 = 5)
+z</code></pre>
+<pre><code>## x1 x2 
+##  3  5</code></pre>
+<pre class="r"><code>z = cbind(x1 = 3, x2 = 5)
+z</code></pre>
+<pre><code>##      x1 x2
+## [1,]  3  5</code></pre>
+<pre class="r"><code>z = c(x1 = 3, x2 = c(1:5))
+z</code></pre>
+<pre><code>##  x1 x21 x22 x23 x24 x25 
+##   3   1   2   3   4   5</code></pre>
+<pre class="r"><code>z = cbind(x1 =3, x2 = c(1:5))
+z</code></pre>
+<pre><code>##      x1 x2
+## [1,]  3  1
+## [2,]  3  2
+## [3,]  3  3
+## [4,]  3  4
+## [5,]  3  5</code></pre>
+</div>
+</div>
 
 
 

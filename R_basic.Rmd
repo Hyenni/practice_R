@@ -46,6 +46,8 @@ which(b=='Lee')
 length(which(b=='Lee'))
 ```
 
+
+
 ##2. List
 
 A list is an R structure that may contain objects of any other types, including other lists.
@@ -129,6 +131,7 @@ person[which(person$gender=='M'| person$age<=30),]
 ```
 
 
+
 ##4. Matrix
 
 ### [Including Code]
@@ -145,6 +148,8 @@ A[1:2,3:4]
 t(A)
 
 ```
+
+
 
 ##5. Json
 (Data Expression Sharing)
@@ -178,3 +183,123 @@ group = fromJSON(file='test.json')
 all.equal(members,group)
 
 ```
+
+
+
+##6. Function
+
+One of the great strengths of R is the user's ability to add functions. The structure of a function is given below.
+
+myfunction <- function(arg1, arg2, ...){
+
+statements
+
+return(object)
+
+}
+
+### [Including Code]
+
+
+```{r include=TRUE}
+
+myfunc = function(a,b) {return(a+b)}
+myfunc(1,2)
+
+myfunc = function(a,b,c=100) {return(a+b+c)}
+myfunc(1,2)
+myfunc(1,2,1000)
+
+myfunc = function(a) {if(a==1) TRUE else FALSE}
+myfunc
+myfunc(1)
+myfunc(2)
+
+b = c(1:5)
+b
+
+for(i in b) {print(myfunc(i))}
+
+```
+
+
+
+##7. Save
+
+save: writes an external representation of R objects to the specified file.
+
+#####1.) save.image(file='.Rdata'), save.image() ==> 작업한 것 모두 저장
+
+#####2.) save(변수명,file='변수명.Rdata') ==> 특정 변수 저장 (재사용 가능)
+
+### [Including Code]
+
+
+```{r include=TRUE}
+
+a = c(1:100)
+a
+
+save(a,file='a_save.RData')
+
+remove(a)
+
+#>a
+#Error: object 'a' not found 
+
+load(file='a_save.RData')
+a
+
+```
+
+
+##8. Apply
+
+returns a vector or array or list of values obtained by applying a function to margins of an array or matrix.
+
+lapply returns a list of the same length as X, each element of which is the result of applying FUN to the corresponding element of X.
+
+apply(X, MARGIN, FUN, ...)
+
+MARGIN: 1-> Row way, 2-> Column way
+
+
+### [Including Code]
+
+
+```{r include=TRUE}
+
+x = cbind(x1 = 3,x2 = c(4:1,2:5))
+dimnames(x)[[1]] <- letters[1:8]
+x
+
+apply(x,1,mean,trim=.2)
+
+apply(x,2,mean,trim=.2)
+
+lapply(c(1:3),function(x) {x+100})
+
+
+y = cbind(x1 = 3,x2 = c(4:1,2:5))
+y
+
+dimnames(y)[[1]] <- letters[1:8]
+y
+
+dimnames(y)[[2]] <- letters[9:10]
+y
+
+z = c(x1 = 3, x2 = 5)
+z
+
+z = cbind(x1 = 3, x2 = 5)
+z
+
+z = c(x1 = 3, x2 = c(1:5))
+z
+
+z = cbind(x1 =3, x2 = c(1:5))
+z
+
+```
+

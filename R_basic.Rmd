@@ -1,0 +1,180 @@
+---
+title: "R basic"
+author: "KimHyein"
+date: "2018/12/03"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+##1. Vector/Array
+
+Arrays can store only data type.
+
+### [Including Code]
+
+```{r include=TRUE}
+
+a = c(1,3,5,7,9)
+b = c('Kim','Lee','Michael','Lee')
+
+#Get the first element
+a[1]
+
+a[2:5]
+
+length(a)
+
+sum(a)
+
+mean(a)
+
+a+1
+
+#Compare elements
+a==3
+
+#Find the index
+which(a==5)
+
+#Get the element with an index
+a[which(a==5)]
+
+which(b=='Lee')
+
+#Count the matched
+length(which(b=='Lee'))
+```
+
+##2. List
+
+A list is an R structure that may contain objects of any other types, including other lists.
+List items need to be pointed by [[index]] (double square brackets)
+'List' can make tree-like data
+
+### [Including Code]
+
+
+```{r include=TRUE}
+#List
+L = list(ids=1:5, whos=c('Kim','Lee','Choi'))
+
+names(L)
+
+L[[1]]
+
+L$ids
+
+L$whos
+
+L$whos[1]
+
+L[[1]][5]
+
+```
+
+
+
+##3. DataFrame
+
+A data frame is a table or a two-dimensional array-like structure in which each column contains values of one variable and each row contains one set of values from each column
+
+### [Including Code]
+
+```{r include=TRUE}
+last_name = c('lee','kim','choi','park','lee')
+age = c(24,30,50,34,12)
+gender = c('M','F','M','M','M')
+
+last_name
+age
+gender
+
+#create dataframe
+person = data.frame(last_name,age,gender)
+person
+
+
+person$last_name
+person$age
+person$gender
+
+person[3,2]
+person[3,1:3]
+person[3,]
+person[3,]$age
+person[3,'age']
+
+person$last_name=='choi'
+which(person$last_name=='choi')
+person[which(person$last_name=='choi'),]
+
+person$age==12
+which(person$age==12)
+person[which(person$age==12),]
+
+person[which(person$age>=30),]
+
+person[which(person$gender=='M'),]
+
+#nrow => row count
+nrow(person[which(person$gender=='M'),])
+
+#length => column count
+length(person[which(person$gender=='M'),])
+
+person[which(person$gender=='M'& person$age<=30),]
+person[which(person$gender=='M'| person$age<=30),]
+
+```
+
+
+##4. Matrix
+
+### [Including Code]
+
+```{r include=TRUE}
+matrix(1:12,nrow=3,byrow=FALSE)
+
+matrix(1:12,nrow=3,byrow=TRUE)
+
+A = matrix(1:12,nrow=3,byrow=TRUE)
+A
+A[2,3]
+A[1:2,3:4]
+t(A)
+
+```
+
+##5. Json
+(Data Expression Sharing)
+
+JSON: JavaScript Object Notation
+
+JSON is a syntax for storing and exchanging data.
+JSON is text, written with javascript obect notation.
+
+### [Including Code]
+
+
+```{r include=TRUE}
+
+item1 = list(name='Lee',age=35)
+item2 = list(name='Kim',age=25)
+item3 = list(name='Smith',age=40)
+
+members = list(item1,item2,item3)
+
+library(rjson)
+
+toJSON(members)
+
+con = file('test.json')
+
+writeLines(toJSON(members),con)
+
+group = fromJSON(file='test.json')
+
+all.equal(members,group)
+
+```

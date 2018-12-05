@@ -7,6 +7,14 @@ output:
   pdf_document: default
 ---
 
+```{r include=FALSE}
+
+#install.packages('ggmap')
+#install.packages("ggplot2")
+#install.packages('rgl')
+
+```
+
 ##1. Vector/Array
 
 Arrays can store only data type.
@@ -228,9 +236,8 @@ for(i in b) {print(myfunc(i))}
 
 save: writes an external representation of R objects to the specified file.
 
-#####1.) save.image(file='.Rdata'), save.image() ==> 작업한 것 모두 저장
-
-#####2.) save(변수명,file='변수명.Rdata') ==> 특정 변수 저장 (재사용 가능)
+1) save.image(file='.Rdata), save.image() ==> save all
+2) save.image(variable, file='variable.Rdata) ==> save variable
 
 ### [Including Code]
 
@@ -303,3 +310,195 @@ z
 
 ```
 
+
+
+##9. Plot
+
+### [Including Code]
+
+
+```{r include=TRUE}
+
+
+x = rnorm(100)
+y = rnorm(100)
+t_data = data.frame(x,y)
+plot(t_data$x,t_data$y)
+
+t_data$x
+View(t_data)
+
+plot(rnorm(10),type='o',xlab='step',ylab='strength',col='#FF00FF',pch='+',cex=3,main='TITLE')
+
+```
+
+##10. ggPlot
+
+### [Including Code]
+
+```{r include=TRUE}
+
+library(ggplot2)
+
+test_data = data.frame(step=1:100,value=abs(rnorm(100)))
+head(test_data)
+
+hist(test_data$value)
+ggplot(test_data,aes(x=value))+geom_histogram()
+
+```
+
+
+##11. 3DPlot
+
+### [Including Code]
+
+```{r include=TRUE}
+
+#0,5,10,,,360
+x = seq(0,360,by=5)
+
+#radian value change
+y = sin(x*pi/180)
+
+plot(x,y,type='o',pch='+')
+
+library(rgl)
+
+plot3d(rnorm(100),rnorm(100),rnorm(100))
+test_data = data.frame(x=rnorm(100),y=rnorm(100),z=rnorm(100))
+plot3d(test_data)
+head(test_data)
+
+
+plot3d(NULL,xlab='')
+r=10
+for (p in seq(0,180,10)) {
+  q = seq(0,360,10)
+  x = r *sin(p*pi/180)*cos(q*pi/180)
+  y = r *sin(p*pi/180)*sin(q*pi/180)
+  z = r *cos(p*pi/180)
+  points3d(x,y,z)
+  lines3d(x,y,z,col='red')
+}
+
+
+```
+
+##12. Map
+
+### [Including Code]
+
+```{r include=TRUE}
+
+library(ggplot2)
+library(ggmap)
+library(maps)
+library(mapdata)
+
+map_data
+
+asia = map_data("world",region=c("South Korea","North Korea"))
+
+g = ggplot(asia,aes(x=long,y=lat,group=group,fill=region)) + 
+  geom_polygon(colour="black") +
+  scale_fill_brewer(palette="Set1")
+
+plot(g)
+
+head(asia)
+tail(asia)
+
+plot(asia[,c('long','lat')])
+plot(asia[,c('long','lat')],type='l')
+plot(asia[asia$subregion=='Cheju Do',c('long','lat')],type='o')
+
+```
+
+##13. googlemap  [not running]
+
+### [Including Code]
+
+{r include=TRUE}
+
+library(ggmap)
+library(ggplot2)
+library(maps)
+library(mapdata)
+
+g_map = get_map(
+  location = c(lon = 127.102773,
+               lat = 37.512423),
+  color = "color",
+  source = "google",
+  maptype = "roadmap",
+  zoom = 16)
+
+ggmap(g_map,
+      extent = "device",
+      ylab = "Latitude",
+      xlab = "Longitude")
+
+ourPosition = data.frame(lon=127.102773, lat = 37.512423)
+
+ggmap(g_map) + geom_point(data=ourPosition,aes(x=lon,y=lat),
+                          shape=9,color='red',size=5) +
+              geom_text(data=ourPosition,aes(x=lon,y=(lat)),
+              color='red',label='We are here!',vjust=1.8)
+
+
+
+>ERROR MASSAGE
+
+cannot open URL 'http://maps.googleapis.com/maps/api/staticmap?center=37.512423,127.102773&zoom=16&size=640x640&scale=2&maptype=roadmap&language=en-EN&sensor=false': HTTP status was '403 Forbidden'Error in download.file(url, destfile = tmp, quiet = !messaging, mode = "wb") : 
+  cannot open URL 'http://maps.googleapis.com/maps/api/staticmap?center=37.512423,127.102773&zoom=16&size=640x640&scale=2&maptype=roadmap&language=en-EN&sensor=false'
+  
+
+
+##14. Linear_Regression
+
+### [Including Code]
+
+```{r include=TRUE}
+
+head(airquality)
+tail(airquality)
+plot(airquality)
+res = lm(formula = Ozone ~ Wind, data=airquality)
+plot(airquality[,c('Wind','Ozone')],cex=0.3)
+abline(res,col='red')
+
+```
+
+##15. Clustering
+
+### [Including Code]
+
+```{r include=TRUE}
+
+num_of_clusters=5
+num_of_elements=200
+
+x = sample(1:1000,num_of_elements,replace=F)
+y = sample(1:1000,num_of_elements,replace=F)
+
+t_data = data.frame(x=x,y=y)
+head(t_data)
+
+plot(x,y,cex=0.1)
+
+res = kmeans(t_data,num_of_clusters)
+
+for (i in 1:num_of_clusters) {
+  for (j in which(res$cluster==i)) {
+  lines(c(res$centers[i,1],t_data[j,1]),
+       c(res$centers[i,2],t_data[j,2]),
+       col=i+3)
+}
+  points(res$centers[i,1],t_data[i,2], col='red',cex=2)
+
+  text(res$centers[i,1],t_data[i,2],labels=paste('center-',i),pos=3,cex=0.7)
+
+}
+
+```

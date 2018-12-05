@@ -1,0 +1,230 @@
+---
+title: "Heliocentric Trajectories for planet"
+author: "KIM HYEIN"
+date: "2018-12-05"
+output: html_document
+---
+
+
+###load data
+
+#####NASA Planet data
+
+#####https://omniweb.gsfc.nasa.gov/coho/helios/planet.html
+
+
+```{r include=TRUE}
+
+mercury = read.csv("C:/Users/EDU/Desktop/project/practice_R/mercury.csv")
+
+au <- subset(mercury,select=c(au))
+lon <- subset(mercury,select=c(lon))
+
+venus = read.csv("C:/Users/EDU/Desktop/project/practice_R/venus.csv")
+
+au1 <- subset(venus,select=c(au))
+lon1 <- subset(venus,select=c(lon))
+
+earth = read.csv("C:/Users/EDU/Desktop/project/practice_R/earth.csv")
+
+au2 <- subset(earth,select=c(au))
+lon2 <- subset(earth,select=c(lon))
+
+mars = read.csv("C:/Users/EDU/Desktop/project/practice_R/mars.csv")
+
+au3 <- subset(mars,select=c(au))
+lon3 <- subset(mars,select=c(lon))
+
+jupiter = read.csv("C:/Users/EDU/Desktop/project/practice_R/jupiter.csv")
+
+au4 <- subset(jupiter,select=c(au))
+lon4 <- subset(jupiter,select=c(lon))
+
+saturn = read.csv("C:/Users/EDU/Desktop/project/practice_R/saturn.csv")
+
+au5 <- subset(saturn,select=c(au))
+lon5 <- subset(saturn,select=c(lon))
+
+```
+
+###coordinate calculation
+
+#####Modify some values to show the difference.
+```{r include=TRUE}
+
+x = au*cos(lon)*2
+y = au*sin(lon)*2
+
+x1 = au*cos(lon1)*3
+y1 = au*sin(lon1)*3
+
+x2 = au2*cos(lon2)*2
+y2 = au2*sin(lon2)*2
+
+x3 = au2*cos(lon3)*3
+y3 = au2*sin(lon3)*3
+
+x4 = au4*cos(lon4)
+y4 = au4*sin(lon4)
+
+x5 = au5*cos(lon5)
+y5 = au5*sin(lon5)
+
+#origin
+#x = au*cos(lon)
+#y = au*sin(lon)
+
+#x1 = au*cos(lon1)
+#y1 = au*sin(lon1)
+
+#x2 = au2*cos(lon2)
+#y2 = au2*sin(lon2)
+
+#x3 = au2*cos(lon3)
+#y3 = au2*sin(lon3)
+
+#x4 = au4*cos(lon4)
+#y4 = au4*sin(lon4)
+
+#x5 = au5*cos(lon5)
+#y5 = au5*sin(lon5)
+
+
+```
+
+##Solar System
+
+###Orbits of the Planets
+
+The second gure on the right side shows orbits of 6 planets in Solar system; Mercury, Venus, Earth, Mars, Jupiter, Saturn; during the year of 2017. Unit of the orbit scale is AU(Astronomical Unit), which is the distance between the Sun and the Earth.
+
+```{r include=TRUE}
+
+library(rgl)
+
+#SUN
+
+par(bg = 'black')
+plot(0,0,xlim=range(-12.0,12.0),ylim=range(-15.0,15.0),xlab="au",ylab="au.1",col='#FA049A',pch='*',cex=1.5)
+par(new=TRUE) #plot image attach
+
+#mercury
+
+mercury_route = data.frame(x,y)
+plot(mercury_route,xlim=range(-12.0,12.0),ylim=range(-15.0,15.0), col='#F0FFFF',pch='.')
+par(new=TRUE)  
+
+#venus
+
+venus_route = data.frame(x1,y1)
+plot(venus_route,xlim=range(-12.0,12.0),ylim=range(-15.0,15.0),col='#E8D525',pch='.')
+par(new=TRUE)
+
+#earth
+
+earth_route = data.frame(x2,y2)
+plot(earth_route,xlim=range(-12.0,12.0),ylim=range(-15.0,15.0),col='#07157F',pch='.',cex=2)
+par(new=TRUE) 
+
+#mars
+
+mars_route = data.frame(x3,y3)
+plot(mars_route,xlim=range(-12.0,12.0),ylim=range(-15.0,15.0),col='#DD0C0C',pch='.',cex=2)
+par(new=TRUE) 
+
+#jupiter
+
+jupiter_route = data.frame(x4,y4)
+plot(jupiter_route,xlim=range(-12.0,12.0),ylim=range(-15.0,15.0),col='#E0B163',pch='.',cex=2)
+par(new=TRUE) 
+
+#saturn
+
+saturn_route = data.frame(x5,y5)
+plot(saturn_route,xlim=range(-12.0,12.0),ylim=range(-15.0,15.0),col='#F9F7AA',pch='.',cex=3,main="Solar System",fg="white",col.lab="white",col.axis="white",col.main="white")
+
+legend("bottomright","(x,y)", legend=c("Mercury","Venus","Earth","Mars","Jupiter","Saturn"), col=c("#F0FFFF", "#E8D525","#07157F","#DD0C0C","#E0B163","#F9F7AA"), lty=1, bg = "black", cex = 0.7,text.col="white",box.col="white")
+
+```
+
+##interpretation
+
+#####the relative distance from the sun to the planet (AU)
+
+######experimental value => mercury&venus: < 1AU, earth&mars: 1.xAU, jupyter: 5AU, saturn: 10AU
+######known value => mercury: 0.4AU, venus: 0.7AU, earth: 1AU, mars: 1.5AU, jupyter: 5AU, saturn: 10AU
+
+
+##distance
+
+```{r include=TRUE}
+
+#mercury
+x6 = x[[1]][1] - x[[1]][2]
+y6 = y[[1]][1] - y[[1]][2]
+
+mer_dis = (x6**2 + y6**2)**0.5
+
+#venus
+x7 = x1[[1]][6] - x1[[1]][7]
+y7 = y1[[1]][6] - y1[[1]][7]
+
+ven_dis = (x7**2 + y7**2)**0.5
+
+#earth
+x8 = x2[[1]][1] - x2[[1]][2]
+y8 = y2[[1]][1] - y2[[1]][2]
+
+ear_dis = (x8**2 + y8**2)**0.5
+
+#mars
+
+x9 = x3[[1]][1] - x3[[1]][2]
+y9 = y3[[1]][1] - y3[[1]][2]
+
+mar_dis = (x9**2 + y9**2)**0.5
+
+#jupiter
+x10 = x4[[1]][1]*1.5 - x4[[1]][2]*1.5
+y10 = y4[[1]][1]*1.5 - y4[[1]][2]*1.5
+
+jup_dis = (x10**2 + y10**2)**0.5
+
+
+#saturn
+x11 = x5[[1]][1]*2 - x5[[1]][2]*2
+y11 = y5[[1]][1]*2 - y5[[1]][2]*2
+
+sat_dis = (x11**2 + y11**2)**0.5
+
+##earth standard = 1
+
+
+mer_dis = mer_dis/ear_dis
+ven_dis = ven_dis/ear_dis
+mar_dis = mar_dis/ear_dis
+jup_dis = jup_dis/ear_dis
+sat_dis = sat_dis/ear_dis
+ear_dis = ear_dis/ear_dis
+
+```
+
+##compare of Speed
+
+###Relative Speed of Planets
+
+The figure on the right side shows relative speed of planets in Solar system compared to the revolution speed of the planet Earth.
+
+
+```{r include=TRUE}
+
+data=data.frame(name=c("<1> mercury","<2> venus","<3> earth","<4> mars","<5> jupiter","<6> saturn"),
+                value=c(mer_dis,ven_dis,ear_dis,mar_dis,jup_dis,sat_dis))
+
+library(ggplot2)
+# Barplot
+ggplot(data, aes(x=name, y=value)) + geom_bar(stat = "identity",width=0.6,fill=c('#42403E','#E8D525','#07157F','#DD0C0C','#E0B163','#F9F7AA'),color='black') + ggtitle("Relative Speed of Planets") + labs(x = "Planet", y = "Speed") + theme_bw() + theme(plot.title = element_text(hjust=0.5))
+
+
+```
+
